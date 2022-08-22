@@ -12,26 +12,64 @@ public class Manager {
         notification = new Notification();
         email = new Email();
     }
+    public void fireNotification() {
+        String message = createRandomizedMessage();
+        if (message.substring(0, message.indexOf("|")).equals("Moon Phase")) {
+            notification.displayTray(getDate() + ": Moon Phase", "Click notification to view", true, message.substring(message.indexOf("|") + 1));
+        } else if (message.substring(0, message.indexOf("|")).equals("Star Chart")) {
+            notification.displayTray(getDate() + ": Star Chart", "Click notification to view", true, message.substring(message.indexOf("|") + 1));
+        } else {
+            notification.displayTray(message.substring(0, message.indexOf("|")), message.substring(message.indexOf("|") + 1), false, null);
+        }
+    }
+    public void fireEmail(String recipients) {
+        String emailDetails = "Current Moon Phase: " + astroAPI.parseJSONMoonPhase(astroAPI.makeAPICallMoonPhase(getDate()));
+        emailDetails += "\n\nCurrent Star Chart: " + astroAPI.parseJSONStarChart(astroAPI.makeAPICallStarChart(getDate())) + "\n\n";
+        ArrayList<String> planetInfo = astroAPI.parseJSONPlanet(astroAPI.makeAPICallPlanet(getDate()));
+        for (int i = 0; i < planetInfo.size(); i++) {
+            String temp = planetInfo.get(i);
+            String name = temp.substring(0, temp.indexOf("|"));
+            temp = temp.substring(temp.indexOf("|") + 1);
+            String distanceFromEarth = temp.substring(0, temp.indexOf("|"));
+            temp = temp.substring(temp.indexOf("|") + 1);
+            String rightAscension = temp.substring(0, temp.indexOf("|"));
+            temp = temp.substring(temp.indexOf("|") + 1);
+            String declination = temp.substring(0, temp.indexOf("|"));
+            temp = temp.substring(temp.indexOf("|") + 1);
+            String constellation = temp;
+            emailDetails += name + " Info\nConstellation: " + constellation + "\nDistance From Earth: " + distanceFromEarth + "\nRight Ascension: " + rightAscension + "\nDeclination: " + declination + "\n\n";
+        }
+        email.sendEmail(emailDetails, recipients);
+    }
     public String createRandomizedMessage() {
         int rand = (int) (Math.random() * 13);
         String date = getDate();
-        String message = "";
         ArrayList<String> planetInfo = new ArrayList<String>();
-
+        System.out.println(date);
         if (rand <= 10) {
             planetInfo = astroAPI.parseJSONPlanet(astroAPI.makeAPICallPlanet(date));
-            String name = planetInfo.get(rand).substring(0, planetInfo.get(rand).indexOf("|"));
+            String temp = planetInfo.get(rand);
+            String name = temp.substring(0, temp.indexOf("|"));
+            temp = temp.substring(temp.indexOf("|") + 1);
+            String distanceFromEarth = temp.substring(0, temp.indexOf("|"));
+            temp = temp.substring(temp.indexOf("|") + 1);
+            String rightAscension = temp.substring(0, temp.indexOf("|"));
+            temp = temp.substring(temp.indexOf("|") + 1);
+            String declination = temp.substring(0, temp.indexOf("|"));
+            temp = temp.substring(temp.indexOf("|") + 1);
+            String constellation = temp;
+            return name + " Info\nConstellation: " + constellation + "|Distance From Earth: " + distanceFromEarth + "\nRA: " + rightAscension + "\nDec: " + declination;
         } else if (rand == 11) {
-            return astroAPI.parseJSONMoonPhase(astroAPI.makeAPICallMoonPhase(date));
+            return "Moon Phase|" + astroAPI.parseJSONMoonPhase(astroAPI.makeAPICallMoonPhase(date));
         } else if (rand == 12) {
-            return astroAPI.parseJSONStarChart(astroAPI.makeAPICallStarChart(date));
+            return "Star Chart|" + astroAPI.parseJSONStarChart(astroAPI.makeAPICallStarChart(date));
         }
         return "";
     }
     public String getDate() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDateTime now = LocalDateTime.now();
-        return dtf.format(now);
+        return dtf.format(now).replace("/", "-");
     }
 }
 /*
