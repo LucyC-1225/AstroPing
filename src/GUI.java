@@ -66,7 +66,11 @@ public class GUI extends JPanel
         setTimer.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                interval = Integer.parseInt(JOptionPane.showInputDialog("Enter the interval you want in seconds:"));
+                while(interval <= 10)
+                {
+                    String secondsStr = JOptionPane.showInputDialog ("Enter a timer interval greater than 10: ");
+                    interval = Integer.parseInt(secondsStr);
+                }
                 intervalLabel.setText("Interval: " + interval);
             }});
         this.add(setTimer);
