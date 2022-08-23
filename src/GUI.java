@@ -6,6 +6,7 @@ public class GUI extends JPanel
 {
     private JButton setTimer;
     private JButton startTimer;
+    private JButton stopTimer;
     private JButton sendEmail;
     private JLabel background;
     private JLabel title;
@@ -13,10 +14,12 @@ public class GUI extends JPanel
     private JLabel timerLabel;
     private int interval;
     private int timeLeft;
+    private boolean isStopTimer;
     private Manager m;
 
     public GUI()
     {
+        interval = 15;
         m = new Manager();
         title = new JLabel("AstroPing");
         title.setFont(new Font("Arial", Font.BOLD, 40));
@@ -27,16 +30,16 @@ public class GUI extends JPanel
         intervalLabel = new JLabel("Interval: ");
         intervalLabel.setFont(new Font("Arial", Font.BOLD, 24));
         intervalLabel.setForeground(Color.WHITE);
-        intervalLabel.setBounds(272, 144, 134, 36);
+        intervalLabel.setBounds(272, 144, 200, 36);
         this.add(intervalLabel);
 
         timerLabel = new JLabel("Time Left: ");
         timerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         timerLabel.setForeground(Color.WHITE);
-        timerLabel.setBounds(272, 195, 134, 36);
+        timerLabel.setBounds(272, 195, 200, 36);
         this.add(timerLabel);
 
-        setTimer = new JButton(new ImageIcon("res/Set Interval.png"));
+        setTimer = new JButton(new ImageIcon("src/photo/Set Interval.png"));
         setTimer.setBounds(553, 213, 150, 50);
         setTimer.setFocusable(false);
         setTimer.setContentAreaFilled(false);
@@ -50,20 +53,48 @@ public class GUI extends JPanel
             }});
         this.add(setTimer);
 
-        startTimer = new JButton(new ImageIcon("res/Start Timer.png"));
+        startTimer = new JButton(new ImageIcon("src/photo/Start Timer.png"));
         startTimer.setBounds(325, 369, 150, 50);
         startTimer.setFocusable(false);
         startTimer.setContentAreaFilled(false);
         startTimer.setFocusPainted(false);
         startTimer.setBorderPainted(false);
+        startTimer.setVisible(true);
+        startTimer.setVisible(true);
         startTimer.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                m.fireNotification();
+                if (interval > 10) {
+                    startTimer.setVisible(false);
+                    startTimer.setEnabled(false);
+                    stopTimer.setVisible(true);
+                    stopTimer.setEnabled(true);
+                } else {
+                    JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Interval is too low. Pls set a higher interval");
+                }
             }});
         this.add(startTimer);
 
-        sendEmail = new JButton(new ImageIcon("res/Send Email.png"));
+        stopTimer = new JButton(new ImageIcon("src/photo/Stop_Timer.png"));
+        stopTimer.setBounds(325, 369, 150, 50);
+        stopTimer.setFocusable(false);
+        stopTimer.setContentAreaFilled(false);
+        stopTimer.setFocusPainted(false);
+        stopTimer.setBorderPainted(false);
+        stopTimer.setVisible(false);
+        stopTimer.setEnabled(false);
+        stopTimer.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startTimer.setVisible(true);
+                startTimer.setEnabled(true);
+                stopTimer.setVisible(false);
+                stopTimer.setEnabled(false);
+                isStopTimer = true;
+            }});
+        this.add(stopTimer);
+
+        sendEmail = new JButton(new ImageIcon("src/photo/Send Email.png"));
         sendEmail.setBounds(77, 212, 150, 50);
         sendEmail.setFocusable(false);
         sendEmail.setContentAreaFilled(false);
@@ -77,7 +108,7 @@ public class GUI extends JPanel
             }});
         this.add(sendEmail);
 
-        background = new JLabel(new ImageIcon("res/Space Background.png"));
+        background = new JLabel(new ImageIcon("src/photo/Space Background.png"));
         background.setBounds(0, 0, 800, 600);
         background.setFocusable(false);
         this.add(background);
@@ -85,7 +116,22 @@ public class GUI extends JPanel
         this.setPreferredSize(new Dimension(800, 600));
         this.setBounds(0, 0, 800, 600);
         this.setLayout(null);
+
+
     }
-
-
 }
+
+/*
+public void startTimer1() {
+        long start = System.currentTimeMillis();
+        long end = System.currentTimeMillis() + (10 * 1000);
+        while (start < end) {
+            //timerLabel.setText("Time Left: " + ((end - System.currentTimeMillis()) / 1000));
+            if (System.currentTimeMillis() > end) {
+                start = System.currentTimeMillis();
+                end = System.currentTimeMillis() + (10 * 1000);
+                JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Test");
+            }
+        }
+    }
+ */
