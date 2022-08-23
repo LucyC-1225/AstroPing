@@ -14,12 +14,30 @@ public class GUI extends JPanel
     private JLabel timerLabel;
     private int interval;
     private int timeLeft;
+    private int secondsRanInTimer;
     private boolean isStopTimer;
     private Manager m;
+    private Timer timer;
 
     public GUI()
     {
-        interval = 15;
+        timer = new Timer(1000, new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                secondsRanInTimer++;
+                timeLeft = interval - secondsRanInTimer;
+                timerLabel.setText("Time Left: " + timeLeft);
+
+                if (timeLeft == 0) {
+                    timer.stop();
+                    timer.restart();
+                    secondsRanInTimer = 0;
+                    System.out.println("Notification fired");
+                    m.fireNotification();
+                }
+            }
+
+        });
         m = new Manager();
         title = new JLabel("AstroPing");
         title.setFont(new Font("Arial", Font.BOLD, 40));
@@ -69,6 +87,7 @@ public class GUI extends JPanel
                     startTimer.setEnabled(false);
                     stopTimer.setVisible(true);
                     stopTimer.setEnabled(true);
+                    timer.start();
                 } else {
                     JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Interval is too low. Pls set a higher interval");
                 }
@@ -91,6 +110,7 @@ public class GUI extends JPanel
                 stopTimer.setVisible(false);
                 stopTimer.setEnabled(false);
                 isStopTimer = true;
+                timer.stop();
             }});
         this.add(stopTimer);
 
