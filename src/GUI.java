@@ -26,7 +26,7 @@ public class GUI extends JPanel
             public void actionPerformed(ActionEvent e) {
                 secondsRanInTimer++;
                 timeLeft = interval - secondsRanInTimer;
-                timerLabel.setText("Time Left: " + timeLeft);
+                timerLabel.setText("Time Left: " + timeLeft + " seconds");
 
                 if (timeLeft == 0) {
                     timer.stop();
@@ -39,26 +39,25 @@ public class GUI extends JPanel
 
         });
         m = new Manager();
-        title = new JLabel("AstroPing");
-        title.setFont(new Font("Arial", Font.BOLD, 40));
-        title.setForeground(Color.WHITE);
-        title.setBounds(302, 6, 207, 110);
+        title = new JLabel(new ImageIcon("src/photo/AstroPing_Title.png"));
+        title.setBounds(268, 0, 250, 243);
+        title.setFocusable(false);
         this.add(title);
 
-        intervalLabel = new JLabel("Interval: ");
+        intervalLabel = new JLabel("Interval: seconds");
         intervalLabel.setFont(new Font("Arial", Font.BOLD, 24));
         intervalLabel.setForeground(Color.WHITE);
-        intervalLabel.setBounds(272, 144, 200, 36);
+        intervalLabel.setBounds(272, 264, 300, 36);
         this.add(intervalLabel);
 
-        timerLabel = new JLabel("Time Left: ");
+        timerLabel = new JLabel("Time Left: seconds");
         timerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         timerLabel.setForeground(Color.WHITE);
-        timerLabel.setBounds(272, 195, 200, 36);
+        timerLabel.setBounds(272, 319, 300, 36);
         this.add(timerLabel);
 
         setTimer = new JButton(new ImageIcon("src/photo/Set Interval.png"));
-        setTimer.setBounds(553, 213, 150, 50);
+        setTimer.setBounds(600, 372, 150, 50);
         setTimer.setFocusable(false);
         setTimer.setContentAreaFilled(false);
         setTimer.setFocusPainted(false);
@@ -71,12 +70,12 @@ public class GUI extends JPanel
                     String secondsStr = JOptionPane.showInputDialog ("Enter a timer interval greater than 10: ");
                     interval = Integer.parseInt(secondsStr);
                 }
-                intervalLabel.setText("Interval: " + interval);
+                intervalLabel.setText("Interval: " + interval + " seconds");
             }});
         this.add(setTimer);
 
         startTimer = new JButton(new ImageIcon("src/photo/Start Timer.png"));
-        startTimer.setBounds(325, 369, 150, 50);
+        startTimer.setBounds(318, 476, 150, 50);
         startTimer.setFocusable(false);
         startTimer.setContentAreaFilled(false);
         startTimer.setFocusPainted(false);
@@ -99,7 +98,7 @@ public class GUI extends JPanel
         this.add(startTimer);
 
         stopTimer = new JButton(new ImageIcon("src/photo/Stop_Timer.png"));
-        stopTimer.setBounds(325, 369, 150, 50);
+        stopTimer.setBounds(318, 476, 150, 50);
         stopTimer.setFocusable(false);
         stopTimer.setContentAreaFilled(false);
         stopTimer.setFocusPainted(false);
@@ -119,7 +118,7 @@ public class GUI extends JPanel
         this.add(stopTimer);
 
         sendEmail = new JButton(new ImageIcon("src/photo/Send Email.png"));
-        sendEmail.setBounds(77, 212, 150, 50);
+        sendEmail.setBounds(65, 372, 150, 50);
         sendEmail.setFocusable(false);
         sendEmail.setContentAreaFilled(false);
         sendEmail.setFocusPainted(false);
